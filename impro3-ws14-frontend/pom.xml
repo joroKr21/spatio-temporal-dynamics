@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>impro3-ws14</artifactId>
+        <groupId>de.tu_berlin.dima</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>impro3-ws14-frontend</artifactId>
+
+    <properties>
+        <scala.version>2.10.2</scala.version>
+        <scala.tools.version>2.15.2</scala.tools.version>
+        <scalatra.version>2.2.2</scalatra.version>
+        <jetty.version>8.1.10.v20130312</jetty.version>
+        <javax.servlet.version>2.5</javax.servlet.version>
+        <ch.qos.logback.version>1.0.13</ch.qos.logback.version>
+
+        <hbase.version>0.99.2</hbase.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>fully.qualified.MainClass</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-my-jar-with-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- Scala -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+
+        <!-- Scala Compiler -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Scalatra -->
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra_2.10</artifactId>
+            <version>${scalatra.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra-jetty_2.10</artifactId>
+            <version>${scalatra.version}</version>
+        </dependency>
+
+        <!-- Jetty -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <!-- Scalate -->
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra-scalate_2.10</artifactId>
+            <version>${scalatra.version}</version>
+        </dependency>
+
+        <!-- Scalatra-json -->
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra-json_2.10</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <!-- Jackson-json -->
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-jackson_2.10</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <!-- Javax -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${javax.servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${ch.qos.logback.version}</version>
+        </dependency>
+
+        <!-- HBase -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${hbase.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+    </dependencies>
+</project>

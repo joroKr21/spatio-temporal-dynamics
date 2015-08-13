@@ -1,0 +1,80 @@
+#map {
+  width: 100%;
+  height: 700px;
+}
+
+.hashtagCount {
+  float:left;
+  color:#ddd;
+  margin-right:5px;
+  font-size:8pt;
+}
+
+/* Spatial Impact Graph */
+
+#spatialGraph {
+  text-align: center;
+}
+
+svg {
+  font: 14px;
+  font-family:  Tahoma, Geneva, sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #000;
+}
+
+.axis .tick line {
+  stroke: rgba(0, 0, 0, 0.1);
+}
+
+.area {
+  stroke-width: 1;
+}
+
+.area.outer,
+.legend .outer {
+  fill: rgba(230, 230, 255, 0.8);
+  stroke: rgba(216, 216, 255, 0.8);
+}
+
+.area.inner,
+.legend .inner {
+  fill: rgba(127, 127, 255, 0.8);
+  stroke: rgba(96, 96, 255, 0.8);
+}
+
+.median-line,
+.legend .median-line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3;
+}
+
+.marker.color .marker-bg,
+.marker.color path {
+  fill: rgba(255, 127, 0, 0.8);
+  stroke: rgba(255, 127, 0, 0.8);
+  stroke-width: 3;
+}
+
+.marker path {
+  fill: none;
+}
+
+.legend text,
+.marker text {
+  fill: #fff;
+}
+
+.marker text {
+  text-anchor: middle;
+}

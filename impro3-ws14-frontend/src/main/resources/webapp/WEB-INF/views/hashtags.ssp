@@ -1,0 +1,136 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="margin:0;">
+            <h3 style="margin-bottom: 10px">Most popular hashtags</h3>
+            <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%" style="cursor: pointer">
+            <thead>
+                <tr>
+                    <th>Occurrences</th>
+                    <th>Hashtag</th>
+                </tr>
+            </thead>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:1000px; margin-left:-200px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div id="modal-body" style="padding: 15px;">
+                <!--<h4>Statistics</h4>
+                <h5 id="hashtag-occ">Occurrences: </h5>
+                <h5 id="hashtag-focz">Focus-zone: </h5>
+                <h5 id="hashtag-foc">Focus: </h5>
+                <h5 id="hashtag-ent">Entropy: </h5>
+                <h5 id="hashtag-spr">Spread: </h5>-->
+
+                <br/>
+                <h4>Time</h4>
+                <div id="temporal" style="width: 900px; height: 300px;"></div>
+
+                <br/>
+                <h4>Locations</h4>
+                <div style="height:300px; width:100%;" id="heatMap"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+
+<%--<script src="https://maps.googleapis.com/maps/api/js"></script>--%>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=visualization"></script>
+<script src="/static/js/charts/temporal.js"></script>
+
+
+<script type="text/javascript">
+$("document").ready(function() {
+    $("#header-hashtags").addClass("active");
+
+    // Init dataTable
+    $("#table").dataTable({
+        "ajax": {
+            "url": "/api/hashtag/top/2000",
+            "dataSrc": ""
+        },
+        "columns": [
+            { "data": "value" },
+            { "data": "hashtag" }],
+        "order": [[ 0, "desc" ]]
+    });
+
+    // Row-click event
+    $("#table tbody").on('click', 'tr', function () {
+        var hashtag = $('td', this).eq(1).text();
+        initModal(hashtag);
+    });
+
+    // Init heatmap
+    var center = new google.maps.LatLng(46.520413325246864, 361.9765625);
+    var map = new google.maps.Map(document.getElementById('heatMap'), {
+        zoom: 3,
+        center: center,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    var points = [];
+    var heatmap;
+
+    $('#myModal').on('shown', function () {
+        google.maps.event.trigger(map, "resize");
+    });
+
+function initModal(hashtag) {
+    $('#myModal').modal('show');
+    $("#myModalLabel").html("Statistics for <i>#" + hashtag + "</i>");
+
+    $("#temporal").html("");
+    //var svg = dimple.newSvg("#temporal", 900, 400);
+
+    d3.json("/api/hashtag/" + hashtag, function(data) {
+        // Show statistics
+        $("#hashtag-occ").html("Occurrences: <i>" + data.metrics.occurrences + "</i>");
+        $("#hashtag-focz").html("Focus-zone: <i>" + data.metrics.focus_zone + "</i>");
+        $("#hashtag-foc").html("Focus: <i>" + data.metrics.focus + "</i>");
+        $("#hashtag-ent").html("Entropy: <i>" + data.metrics.entropy + "</i>");
+        $("#hashtag-spr").html("Spread: <i>" + data.metrics.spread + "</i>");
+
+        // Generate Heatmap
+        points = [];
+        var bound = new google.maps.LatLngBounds();
+        for(var i = 0; i < data.locations.length; i++) {
+            var point = new google.maps.LatLng(data.locations[i].lat, data.locations[i].lon);
+            bound.extend(point);
+            points.push({location: point, data: data.locations[i].value})
+        }
+        if(heatmap != null) heatmap.setMap(null);
+        heatmap = new google.maps.visualization.HeatmapLayer({ data: points})
+        heatmap.setMap(map);
+        map.setCenter(bound.getCenter());
+
+
+
+        // Generate Temporal chart
+        temporal('#temporal', data.temporal);
+
+//        var temporal = data.temporal;
+//        var temporalChart = new dimple.chart(svg, temporal);
+//        temporalChart.setBounds(60, 30, 850, 305);
+//        var x = temporalChart.addCategoryAxis("x", "time_interval");
+//        //x.addOrderRule("Date");
+//        temporalChart.addMeasureAxis("y", "occurrences");
+//        var s = temporalChart.addSeries(null, dimple.plot.line);
+//        //s.interpolation = "cardinal";
+//
+//        temporalChart.draw();
+    });
+}
+});
+</script>

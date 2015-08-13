@@ -1,0 +1,205 @@
+<%@ var name: String = "world" %>
+
+<div class="container">
+<div class="row">
+    <div class="col-md-4" style="margin:0;">
+        <h3>Top locations</h3>
+        <div class="row" id="top2000" style="height:642px;  margin:0; overflow-y:scroll;"></div>
+    </div>
+    <div class="col-md-8" style="margin:0; padding:0;">
+        <div id="map"></div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:1000px; margin-left:-200px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div id="modal-body" style="padding: 15px;">
+                <h4>Spatial impact</h4>
+                <div id="spatial_impact"></div>
+
+                <br/>
+                <h4>Entropy, focus & spread</h4>
+                <div class="legend">
+                    <div class="label" style="color:#000000">Spread</div>
+                    <div id="linearLegend"></div>
+                </div>
+                <div id="entropy_focus_spread"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<!--Maps Dependencies-->
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+<script src="/static/js/maps/markerclusterer.js"></script>
+<script src="/static/js/maps/markerwithlabel.js"></script>
+
+<!--Charts Dependencies-->
+<script src="/static/js/charts/colorlegend.js"></script>
+<script src="/static/js/charts/spatial_impact.js"></script>
+<script src="/static/js/charts/entropy_focus_spread.js"></script>
+
+<script>
+    function initialize() {
+        $("#header-locations").addClass("active");
+        var center = new google.maps.LatLng(37.4419, -122.1419);
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 3,
+            center: center,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        var markers = [];
+        var markerCluster = new MarkerClusterer(map);
+        markerCluster.setCalculator(function(markers, numStyles) {
+            var index = 0;
+            //var count = markers.length;
+            var count = 0;
+            for(var i = 0; i < markers.length; i++) {
+                count += parseInt(markers[i].title)
+            }
+            var dv = count;
+            while (dv !== 0) {
+                dv = parseInt(dv / 10, 10);
+                index++;
+            }
+
+            index = Math.min(index, numStyles);
+            return {
+                text: count,
+                index: index
+            };
+        });
+
+        $.getJSON("/api/location/top", function(data) {
+            for (var i = 0; i < data.length; i++) {
+                var latLng = new google.maps.LatLng(data[i].lat, data[i].lon);
+                var marker = new MarkerWithLabel({
+                    position: latLng,
+                    map: map,
+                    draggable: false,
+                    icon: "http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m3.png",
+                    raiseOnDrag: false,
+                    labelContent: data[i]['value'].toString(),
+                    labelAnchor: new google.maps.Point(5, 40),
+                    labelClass: "labels", // the CSS class for the label
+                    labelInBackground: false,
+                    title: data[i]['value'].toString() + " occurrences",
+                    loc: data[i].loc
+                });
+
+                $("#top2000").append('<div class="col-md-12"><h5>' +
+                    (i+1) + '. ' +  data[i]['value'].toString() + ' Hashtags in: <a href="#" class="loc" lat=' + data[i].lat +' lon=' + data[i].lon +'>' + data[i].loc +'</a> <a href="#" style="float:right;" class="more" loc=' + data[i].loc +'> more</a></h5></div>' +
+                    '<div class="col-md-12" style="margin-top:-10px;">' +
+
+                    '</div>');
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    openPopup(marker.loc)
+                });
+                markers.push(marker);
+            }
+            markerCluster.addMarkers(markers, true);
+            markerCluster.repaint();
+
+            $(".loc").click(function() {
+                var lat = $(this).attr("lat");
+                var lon = $(this).attr("lon");
+                map.setZoom(12);
+                map.panTo(new google.maps.LatLng(lat, lon));
+            });
+
+            $(".more").click(function() {
+                var loc = $(this).attr("loc");
+                openPopup(loc);
+            });
+        });
+    }
+
+    function openPopup(loc) {
+        $('#myModal').modal('show');
+        $("#myModalLabel").html("Statistics for " + loc);
+
+        $.getJSON("/api/location/details/" + loc, function(data) {
+            // Plot spatial-impact chart
+            var element = '#spatial_impact';
+            spatial_impact(element, data.spatial_impact);
+
+            // Plot Entropy, focus & spread scatter-plot
+            var el = "#entropy_focus_spread";
+            entropy_focus_spread(el, data.entropy_focus_spread);
+        });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+<style type="text/css">
+/* For the map */
+.labels {
+    color: blue;
+    text-decoration: underline;
+    font-size: 11px;
+    text-align: center;
+    font-family:Arial,sans-serif;
+    font-weight:bold
+}
+
+/* For the scatter plot */
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.dot:hover {
+    stroke: #000;
+}
+
+.tooltip {
+    position: absolute;
+    width: 200px;
+    /*height: 28px;*/
+    pointer-events: none;
+    border: 1px #eee solid;
+    padding: 10px;
+}
+
+/* For the color legend */
+#linearLegend {
+    width: 180px;
+    height: 60px;
+}
+
+.legend {
+    /*background-color: #fff;*/
+    position: absolute;
+    right:70px;
+    margin-top: 30px;
+}
+#quantileLegend .colorlegend-labels {
+    font-size: 11px;
+    fill: black;
+}
+#linearLegend .colorlegend-labels {
+    font-size: 9px;
+    fill: #888;
+}
+#ordinalLegend .colorlegend-title {
+    font-size: 18px;
+    fill: #aaa;
+}
+</style>

@@ -1,0 +1,4 @@
+[submodule "flink-graph"]
+	path = impro3-ws14-flink-graph
+	url = git@github.com:TU-Berlin-DIMA/flink-graph.git
+	branch = impro-3

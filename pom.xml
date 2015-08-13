@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.tu_berlin.dima</groupId>
+    <artifactId>impro3-ws14</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>IMPRO-3.WS14</name>
+    <description>IMPRO-3.WS14 main project</description>
+    <url>https://github.com/TU-Berlin-DIMA/IMPRO-3.WS14</url>
+
+    <properties>
+        <!-- Common -->
+        <encoding>UTF-8</encoding>
+
+        <!-- Maven Plugins -->
+        <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
+        <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
+        <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+        <scala-maven-plugin.version>3.1.6</scala-maven-plugin.version>
+        <build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
+
+        <!-- Java -->
+        <java.version>1.7</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Testing -->
+        <junit.version>4.11</junit.version>
+
+        <!-- Flink -->
+        <flink.version>0.8-SNAPSHOT</flink.version>
+
+        <!-- Other dependencies -->
+        <argparse4j.version>0.4.3</argparse4j.version>
+        <reflections.version>0.9.9-RC1</reflections.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- IMPRO-3 -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>impro3-ws14-buildtools</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>impro3-ws14-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>impro3-ws14-scala</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>impro3-ws14-spark</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>impro3-ws14-flink</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>impro3-ws14-flink-graph</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Arguments parsing -->
+        <dependency>
+            <groupId>net.sourceforge.argparse4j</groupId>
+            <artifactId>argparse4j</artifactId>
+            <version>${argparse4j.version}</version>
+        </dependency>
+
+        <!-- Dynamic loading -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflections.version}</version>
+        </dependency>
+    </dependencies>
+
+    <!-- Enable Apache Development Snapshot Repository -->
+    <repositories>
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache Development Snapshot Repository</name>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Java Compiler -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+
+                <!-- Scala compiler -->
+                <plugin>
+                    <groupId>net.alchim31.maven</groupId>
+                    <artifactId>scala-maven-plugin</artifactId>
+                    <version>${scala-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>scala-compile-first</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>scala-test-compile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <recompileMode>incremental</recompileMode>
+                        <useZincServer>true</useZincServer>
+                        <jvmArgs>
+                            <jvmArg>-Xms128m</jvmArg>
+                            <jvmArg>-Xmx512m</jvmArg>
+                            <javacArg>-Xlint:unchecked</javacArg>
+                            <javacArg>-Xlint:deprecation</javacArg>
+                        </jvmArgs>
+                        <args>
+                            <arg>-deprecation</arg>
+                            <arg>-feature</arg>
+                        </args>
+                    </configuration>
+                </plugin>
+
+                <!-- Surefire -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <includes>
+                            <include>**/*Suite.class</include>
+                            <include>**/*Test.class</include>
+                            <include>**/*Tests.class</include>
+                            <include>**/*Spec.class</include>
+                            <include>**/*Specs.class</include>
+                        </includes>
+                    </configuration>
+                </plugin>
+
+                <!-- Java Code formatting -->
+                <plugin>
+                    <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+                    <artifactId>maven-java-formatter-plugin</artifactId>
+                    <version>0.4</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>format</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <configFile>eclipse/formatter.xml</configFile>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>impro3-ws14-buildtools</artifactId>
+                            <version>${project.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <!-- Shade Package (Create package with dependencies) -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>2.3</version>
+                    <executions>
+                        <execution>
+                            <id>shade-package</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <minimizeJar>false</minimizeJar>
+                                <filters>
+                                    <filter>
+                                        <artifact>*:*</artifact>
+                                        <excludes>
+                                            <exclude>META-INF/**</exclude>
+                                        </excludes>
+                                    </filter>
+                                </filters>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <modules>
+        <module>impro3-ws14-buildtools</module>
+        <module>impro3-ws14-core</module>
+        <module>impro3-ws14-scala</module>
+        <module>impro3-ws14-flink</module>
+        <module>impro3-ws14-flink-graph</module>
+        <module>impro3-ws14-spark</module>
+        <module>impro3-ws14-frontend</module>
+    </modules>
+
+</project>

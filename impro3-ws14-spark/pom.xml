@@ -1,0 +1,113 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>impro3-ws14</artifactId>
+        <groupId>de.tu_berlin.dima</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>impro3-ws14-spark</artifactId>
+    <name>IMPRO-3.WS14 (Spark)</name>
+
+    <properties>
+        <!-- Scala -->
+        <scala.version>2.10.4</scala.version>
+        <scala.tools.version>2.10</scala.tools.version>
+
+        <!-- Spark -->
+        <spark.version>1.1.0</spark.version>
+
+        <!-- Testing -->
+        <scalatest.version>2.1.6</scalatest.version>
+        <specs2.version>2.3.10</specs2.version>
+        <scalacheck.version>1.12.0</scalacheck.version>
+        <scalameter.version>0.6</scalameter.version>
+
+        <!-- Other dependencies -->
+        <json4s.version>3.2.11</json4s.version>
+    </properties>
+
+    <dependencies>
+        <!-- IMPRO.SS14 -->
+        <dependency>
+            <groupId>de.tu_berlin.dima</groupId>
+            <artifactId>impro3-ws14-core</artifactId>
+        </dependency>
+
+        <!-- Spark -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.tools.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Json4s -->
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-native_${scala.tools.version}</artifactId>
+            <version>${json4s.version}</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.tools.version}</artifactId>
+            <version>${scalatest.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalacheck</groupId>
+            <artifactId>scalacheck_${scala.tools.version}</artifactId>
+            <version>${scalacheck.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.storm-enroute</groupId>
+            <artifactId>scalameter_${scala.tools.version}</artifactId>
+            <version>${scalameter.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Java Code formatting -->
+            <plugin>
+                <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+                <artifactId>maven-java-formatter-plugin</artifactId>
+            </plugin>
+
+            <!-- Scala compiler -->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Shade Package (Create package with dependencies) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>shade-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>de.tu_berlin.impro3.spark.App</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
