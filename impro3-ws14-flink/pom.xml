@@ -31,10 +31,6 @@
             <groupId>de.tu_berlin.dima</groupId>
             <artifactId>impro3-ws14-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>de.tu_berlin.dima</groupId>
-            <artifactId>impro3-ws14-flink-graph</artifactId>
-        </dependency>
 
         <!-- Flink -->
         <dependency>

@@ -69,11 +69,6 @@
                 <artifactId>impro3-ws14-flink</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>impro3-ws14-flink-graph</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -248,7 +243,6 @@
         <module>impro3-ws14-core</module>
         <module>impro3-ws14-scala</module>
         <module>impro3-ws14-flink</module>
-        <module>impro3-ws14-flink-graph</module>
         <module>impro3-ws14-spark</module>
         <module>impro3-ws14-frontend</module>
     </modules>

@@ -2,9 +2,7 @@ package de.tu_berlin.impro3.flink.spatio_temporal_dynamics.parsers
 
 import java.util.Date
 
-import de.tu_berlin.impro3.flink.io.TweetInputFormat
 import de.tu_berlin.impro3.flink.spatio_temporal_dynamics._
-import io.TweetAdapter
 import model.Tweet
 
 import org.junit.runner.RunWith
@@ -15,7 +13,6 @@ import org.scalatest.prop.PropertyChecks
 @RunWith(classOf[JUnitRunner])
 class ParserSpec extends PropSpec with PropertyChecks with Matchers {
   val jsonParser = new JsonParser
-  val gsonParser = new TweetInputFormat
   val jaxParser  = new JaxParser
   val csvParser  = new CsvParser
   val tabParser  = new TabularParser
@@ -80,14 +77,6 @@ class ParserSpec extends PropSpec with PropertyChecks with Matchers {
       val option = jaxParser.parse(toJson(tweet))
       option should be ('defined)
       option.get shouldMatchTweet tweet
-    }
-  }
-
-  property("A Gson parser should parse arbitrary Tweets from JSON format") {
-    forAll { tweet: Tweet =>
-      val bytes  = toJson(tweet).getBytes
-      val parsed = gsonParser.readRecord(null, bytes, 0, bytes.length)
-      TweetAdapter.map(parsed) shouldMatchTweet tweet
     }
   }
 

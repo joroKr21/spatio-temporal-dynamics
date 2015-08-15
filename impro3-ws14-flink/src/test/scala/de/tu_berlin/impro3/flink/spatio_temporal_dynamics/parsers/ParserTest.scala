@@ -2,9 +2,7 @@ package de.tu_berlin.impro3.flink.spatio_temporal_dynamics.parsers
 
 import java.util.{ TimeZone, GregorianCalendar }
 
-import de.tu_berlin.impro3.flink.io.TweetInputFormat
 import de.tu_berlin.impro3.flink.spatio_temporal_dynamics._
-import io.TweetAdapter
 import model.Tweet
 
 import scala.io.Source
@@ -16,7 +14,6 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class ParserTest extends FlatSpec with Matchers {
   val jsonParser = new JsonParser
-  val gsonParser = new TweetInputFormat
   val jaxParser  = new JaxParser
   val csvParser  = new CsvParser
   val tabParser  = new TabularParser
@@ -29,19 +26,11 @@ class ParserTest extends FlatSpec with Matchers {
     val total   = lines.size
     val tweets1 = jsonParser.parse(lines)
     val tweets2 =  jaxParser.parse(lines)
-    val tweets3 = lines.map { line =>
-      val bytes = line.getBytes
-      val tweet = gsonParser.readRecord(null, bytes, 0, bytes.length)
-      TweetAdapter.map(tweet)
-    } // size should be the same
     tweets1 should have size total
     tweets2 should have size total
-    tweets3 should have size total
     // and all tweets should match
-    tweets1.zip(tweets2).zip(tweets3).foreach {
-      case ((tweet1, tweet2), tweet3) =>
-        tweet1 shouldMatchTweet tweet2
-        tweet2 shouldMatchTweet tweet3
+    (tweets1 zip tweets2).foreach { case (tweet1, tweet2) =>
+      tweet1 shouldMatchTweet tweet2
     }
   }
 
@@ -69,12 +58,10 @@ class ParserTest extends FlatSpec with Matchers {
     val bytes   = json.getBytes
     val option1 = jsonParser.parse(json)
     val option2 =  jaxParser.parse(json)
-    val parsed3 = gsonParser.readRecord(null, bytes, 0, bytes.length)
     option1 should be ('defined)
     option2 should be ('defined)
-    option1.get               shouldMatchTweet tweet
-    option2.get               shouldMatchTweet tweet
-    TweetAdapter.map(parsed3) shouldMatchTweet tweet
+    option1.get shouldMatchTweet tweet
+    option2.get shouldMatchTweet tweet
   }
 
   "A JsonParser and JaxParser" should "fail on invalid date format" in {
