@@ -11,21 +11,6 @@
     <artifactId>impro3-ws14-scala</artifactId>
     <name>IMPRO-3.WS14 (Scala)</name>
 
-    <properties>
-        <!-- Scala -->
-        <scala.version>2.10.4</scala.version>
-        <scala.tools.version>2.10</scala.tools.version>
-
-        <!-- Testing -->
-        <scalatest.version>2.1.6</scalatest.version>
-        <specs2.version>2.3.10</specs2.version>
-        <scalacheck.version>1.12.0</scalacheck.version>
-        <scalameter.version>0.6</scalameter.version>
-
-        <!-- Other dependencies -->
-        <json4s.version>3.2.11</json4s.version>
-    </properties>
-
     <dependencies>
         <!-- IMPRO.SS14 -->
         <dependency>
@@ -47,30 +32,26 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Json4s -->
+        <!-- JSON -->
         <dependency>
             <groupId>org.json4s</groupId>
             <artifactId>json4s-native_${scala.tools.version}</artifactId>
             <version>${json4s.version}</version>
         </dependency>
 
-        <!-- ScalaTest -->
+        <!-- Testing -->
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.tools.version}</artifactId>
             <version>${scalatest.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- ScalaCheck -->
         <dependency>
             <groupId>org.scalacheck</groupId>
             <artifactId>scalacheck_${scala.tools.version}</artifactId>
             <version>${scalacheck.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- ScalaMeter -->
         <dependency>
             <groupId>com.storm-enroute</groupId>
             <artifactId>scalameter_${scala.tools.version}</artifactId>

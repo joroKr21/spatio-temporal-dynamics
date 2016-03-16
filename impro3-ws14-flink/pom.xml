@@ -11,20 +11,6 @@
     <artifactId>impro3-ws14-flink</artifactId>
     <name>IMPRO-3.WS14 (Flink)</name>
 
-    <properties>
-        <!-- Scala -->
-        <scala.tools.version>2.10</scala.tools.version>
-
-        <!-- Testing -->
-        <scalatest.version>2.1.6</scalatest.version>
-        <scalacheck.version>1.12.0</scalacheck.version>
-        <scalameter.version>0.6</scalameter.version>
-
-        <!-- Other dependencies -->
-        <json4s.version>3.2.11</json4s.version>
-        <hbase.version>0.99.2</hbase.version>
-    </properties>
-
     <dependencies>
         <!-- IMPRO.SS14 -->
         <dependency>
@@ -35,37 +21,44 @@
         <!-- Flink -->
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-clients</artifactId>
+            <artifactId>flink-clients_${scala.tools.version}</artifactId>
             <version>${flink.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-scala</artifactId>
+            <artifactId>flink-scala_${scala.tools.version}</artifactId>
             <version>${flink.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-java</artifactId>
+            <artifactId>flink-java_${scala.tools.version}</artifactId>
             <version>${flink.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-test-utils</artifactId>
+            <artifactId>flink-test-utils_${scala.tools.version}</artifactId>
             <version>${flink.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- JSON -->
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-native_${scala.tools.version}</artifactId>
+            <version>${json4s.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.2.3</version>
+            <version>${gson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
+            <version>${json-simple.version}</version>
         </dependency>
 
         <!-- HBase -->
@@ -74,37 +67,32 @@
             <artifactId>hbase-client</artifactId>
             <version>${hbase.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
-            <version>2.6.0</version>
+            <version>${hadoop.version}</version>
         </dependency>
 
-        <!-- Json4s -->
+        <!-- Shapeless -->
         <dependency>
-            <groupId>org.json4s</groupId>
-            <artifactId>json4s-native_${scala.tools.version}</artifactId>
-            <version>${json4s.version}</version>
+            <groupId>com.chuusai</groupId>
+            <artifactId>shapeless_${scala.tools.version}</artifactId>
+            <version>${shapeless.version}</version>
         </dependency>
 
-        <!-- ScalaTest -->
+        <!-- Testing -->
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.tools.version}</artifactId>
             <version>${scalatest.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- ScalaCheck -->
         <dependency>
             <groupId>org.scalacheck</groupId>
             <artifactId>scalacheck_${scala.tools.version}</artifactId>
             <version>${scalacheck.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- ScalaMeter -->
         <dependency>
             <groupId>com.storm-enroute</groupId>
             <artifactId>scalameter_${scala.tools.version}</artifactId>

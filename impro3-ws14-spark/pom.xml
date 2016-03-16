@@ -11,24 +11,6 @@
     <artifactId>impro3-ws14-spark</artifactId>
     <name>IMPRO-3.WS14 (Spark)</name>
 
-    <properties>
-        <!-- Scala -->
-        <scala.version>2.10.4</scala.version>
-        <scala.tools.version>2.10</scala.tools.version>
-
-        <!-- Spark -->
-        <spark.version>1.1.0</spark.version>
-
-        <!-- Testing -->
-        <scalatest.version>2.1.6</scalatest.version>
-        <specs2.version>2.3.10</specs2.version>
-        <scalacheck.version>1.12.0</scalacheck.version>
-        <scalameter.version>0.6</scalameter.version>
-
-        <!-- Other dependencies -->
-        <json4s.version>3.2.11</json4s.version>
-    </properties>
-
     <dependencies>
         <!-- IMPRO.SS14 -->
         <dependency>

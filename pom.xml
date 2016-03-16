@@ -27,17 +27,49 @@
         <build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
 
         <!-- Java -->
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Testing -->
-        <junit.version>4.11</junit.version>
+        <!-- Scala -->
+        <scala.version>2.11.7</scala.version>
+        <scala.tools.version>2.11</scala.tools.version>
+
+        <!-- Shapeless -->
+        <shapeless.version>2.3.0</shapeless.version>
 
         <!-- Flink -->
-        <flink.version>0.8-SNAPSHOT</flink.version>
+        <flink.version>0.10.1</flink.version>
+
+        <!-- Spark -->
+        <spark.version>1.6.0</spark.version>
+
+        <!-- Hadoop -->
+        <hadoop.version>2.6.0</hadoop.version>
+        <hbase.version>0.99.2</hbase.version>
+
+        <!-- JSON -->
+        <json4s.version>3.3.0</json4s.version>
+        <gson.version>2.6.2</gson.version>
+        <json-simple.version>1.1.1</json-simple.version>
+
+        <!-- Scalatra -->
+        <scalatra.version>2.4.0</scalatra.version>
+        <jetty.version>9.3.8.v20160314</jetty.version>
+        <javax.servlet.version>2.5</javax.servlet.version>
+
+        <!-- Logging -->
+        <log4j.version>1.2.17</log4j.version>
+        <slf4j.version>1.7.19</slf4j.version>
+        <ch.qos.logback.version>1.1.6</ch.qos.logback.version>
+
+        <!-- Testing -->
+        <junit.version>4.12</junit.version>
+        <scalatest.version>2.2.6</scalatest.version>
+        <scalacheck.version>1.13.0</scalacheck.version>
+        <scalameter.version>0.6</scalameter.version>
 
         <!-- Other dependencies -->
-        <argparse4j.version>0.4.3</argparse4j.version>
+        <argparse4j.version>0.7.0</argparse4j.version>
         <reflections.version>0.9.9-RC1</reflections.version>
     </properties>
 

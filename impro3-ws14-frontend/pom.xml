@@ -7,20 +7,9 @@
         <groupId>de.tu_berlin.dima</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>impro3-ws14-frontend</artifactId>
-
-    <properties>
-        <scala.version>2.10.2</scala.version>
-        <scala.tools.version>2.15.2</scala.tools.version>
-        <scalatra.version>2.2.2</scalatra.version>
-        <jetty.version>8.1.10.v20130312</jetty.version>
-        <javax.servlet.version>2.5</javax.servlet.version>
-        <ch.qos.logback.version>1.0.13</ch.qos.logback.version>
-
-        <hbase.version>0.99.2</hbase.version>
-    </properties>
 
     <build>
         <plugins>
@@ -62,8 +51,6 @@
             <artifactId>scala-reflect</artifactId>
             <version>${scala.version}</version>
         </dependency>
-
-        <!-- Scala Compiler -->
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
@@ -74,49 +61,41 @@
         <!-- Scalatra -->
         <dependency>
             <groupId>org.scalatra</groupId>
-            <artifactId>scalatra_2.10</artifactId>
+            <artifactId>scalatra_${scala.tools.version}</artifactId>
             <version>${scalatra.version}</version>
         </dependency>
         <dependency>
             <groupId>org.scalatra</groupId>
-            <artifactId>scalatra-jetty_2.10</artifactId>
+            <artifactId>scalatra-jetty_${scala.tools.version}</artifactId>
             <version>${scalatra.version}</version>
         </dependency>
-
-        <!-- Jetty -->
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra-scalate_${scala.tools.version}</artifactId>
+            <version>${scalatra.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra-json_${scala.tools.version}</artifactId>
+            <version>${scalatra.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
             <version>${jetty.version}</version>
         </dependency>
-
-        <!-- Scalate -->
-        <dependency>
-            <groupId>org.scalatra</groupId>
-            <artifactId>scalatra-scalate_2.10</artifactId>
-            <version>${scalatra.version}</version>
-        </dependency>
-
-        <!-- Scalatra-json -->
-        <dependency>
-            <groupId>org.scalatra</groupId>
-            <artifactId>scalatra-json_2.10</artifactId>
-            <version>2.2.0</version>
-        </dependency>
-
-        <!-- Jackson-json -->
-        <dependency>
-            <groupId>org.json4s</groupId>
-            <artifactId>json4s-jackson_2.10</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
-        <!-- Javax -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>${javax.servlet.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- JSON -->
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-jackson_${scala.tools.version}</artifactId>
+            <version>${json4s.version}</version>
         </dependency>
 
         <!-- Logging -->
@@ -132,11 +111,10 @@
             <artifactId>hbase-client</artifactId>
             <version>${hbase.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
-            <version>2.6.0</version>
+            <version>${hadoop.version}</version>
         </dependency>
     </dependencies>
 </project>
