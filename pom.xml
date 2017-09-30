@@ -23,7 +23,7 @@
         <maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
         <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
         <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-        <scala-maven-plugin.version>3.1.6</scala-maven-plugin.version>
+        <scala-maven-plugin.version>3.2.0</scala-maven-plugin.version>
         <build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
 
         <!-- Java -->
