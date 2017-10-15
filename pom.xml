@@ -18,59 +18,59 @@
         <encoding>UTF-8</encoding>
 
         <!-- Maven Plugins -->
-        <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
-        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>2.12</maven-surefire-plugin.version>
-        <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
-        <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-        <scala-maven-plugin.version>3.2.0</scala-maven-plugin.version>
-        <build-helper-maven-plugin.version>1.7</build-helper-maven-plugin.version>
+        <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+        <scala-maven-plugin.version>3.3.1</scala-maven-plugin.version>
+        <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
 
         <!-- Java -->
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Scala -->
-        <scala.version>2.11.7</scala.version>
+        <scala.version>2.11.11</scala.version>
         <scala.tools.version>2.11</scala.tools.version>
 
         <!-- Shapeless -->
-        <shapeless.version>2.3.0</shapeless.version>
+        <shapeless.version>2.3.2</shapeless.version>
 
         <!-- Flink -->
-        <flink.version>0.10.1</flink.version>
+        <flink.version>1.3.2</flink.version>
 
         <!-- Spark -->
-        <spark.version>1.6.0</spark.version>
+        <spark.version>2.2.0</spark.version>
 
         <!-- Hadoop -->
-        <hadoop.version>2.6.0</hadoop.version>
-        <hbase.version>0.99.2</hbase.version>
+        <hadoop.version>2.8.1</hadoop.version>
+        <hbase.version>1.3.1</hbase.version>
 
         <!-- JSON -->
-        <json4s.version>3.3.0</json4s.version>
-        <gson.version>2.6.2</gson.version>
+        <json4s.version>3.5.3</json4s.version>
+        <gson.version>2.8.2</gson.version>
         <json-simple.version>1.1.1</json-simple.version>
 
         <!-- Scalatra -->
-        <scalatra.version>2.4.0</scalatra.version>
-        <jetty.version>9.3.8.v20160314</jetty.version>
+        <scalatra.version>2.5.1</scalatra.version>
+        <jetty.version>9.4.7.v20170914</jetty.version>
         <javax.servlet.version>2.5</javax.servlet.version>
 
         <!-- Logging -->
         <log4j.version>1.2.17</log4j.version>
-        <slf4j.version>1.7.19</slf4j.version>
-        <ch.qos.logback.version>1.1.6</ch.qos.logback.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <ch.qos.logback.version>1.2.3</ch.qos.logback.version>
 
         <!-- Testing -->
         <junit.version>4.12</junit.version>
-        <scalatest.version>2.2.6</scalatest.version>
-        <scalacheck.version>1.13.0</scalacheck.version>
+        <scalatest.version>3.0.4</scalatest.version>
+        <scalacheck.version>1.13.5</scalacheck.version>
         <scalameter.version>0.6</scalameter.version>
 
         <!-- Other dependencies -->
         <argparse4j.version>0.7.0</argparse4j.version>
-        <reflections.version>0.9.9-RC1</reflections.version>
+        <reflections.version>0.9.11</reflections.version>
     </properties>
 
     <dependencyManagement>

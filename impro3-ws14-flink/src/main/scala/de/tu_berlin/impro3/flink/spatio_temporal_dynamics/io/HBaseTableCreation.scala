@@ -1,58 +1,44 @@
 package de.tu_berlin.impro3.flink.spatio_temporal_dynamics.io
 
-import org.apache.hadoop.hbase.HBaseConfiguration._
-import org.apache.hadoop.hbase.client.HBaseAdmin
-import org.apache.hadoop.hbase.{HColumnDescriptor, HTableDescriptor}
+import org.apache.hadoop.hbase._
+import org.apache.hadoop.hbase.client._
 
 class HBaseTableCreation {
+  def initializeSchema() {
+    val conf  = HBaseConfiguration.create()
+    val conn  = ConnectionFactory.createConnection(conf)
+    val admin = conn.getAdmin
 
-    def initializeSchema() {
-
-      val conf  = create()
-      val admin = new HBaseAdmin(conf)
-
-      //Create HTable Hashtags if it does not exit
-      if ( !  admin.tableExists("Hashtags") ){
-        val descHashtags      = new HTableDescriptor("Hashtags")
-        val metricsHashtags   = new HColumnDescriptor("metrics")
-        val temporalHashtags  = new HColumnDescriptor("temporal")
-
-        descHashtags.addFamily(metricsHashtags)
-        descHashtags.addFamily(temporalHashtags)
-
-        admin.createTable(descHashtags)
-      }
-
-
-      //Create HTable Locations if it does not exit
-      if ( !  admin.tableExists("Locations")){
-        val descLocation      = new HTableDescriptor("Locations")
-        val metricsLocation   = new HColumnDescriptor("metrics")
-
-        descLocation.addFamily(metricsLocation)
-
-        admin.createTable(descLocation)
-      }
-
-      //Create HTable Locations if it does not exit
-      if ( ! admin.tableExists("SortedLocations")){
-        val descSorted      = new HTableDescriptor("SortedLocations")
-        val metricsSorted   = new HColumnDescriptor("location")
-
-        descSorted.addFamily(metricsSorted)
-
-        admin.createTable(descSorted)
-      }
-
-
-      if ( ! admin.tableExists("SortedHashtags")){
-        val descSortedHashtags      = new HTableDescriptor("SortedHashtags")
-        val metricsSortedHashtags   = new HColumnDescriptor("hashtags")
-
-        descSortedHashtags.addFamily(metricsSortedHashtags)
-
-        admin.createTable(descSortedHashtags)
-      }
-
+    // Create HTable Hash-tags if it does not exist.
+    val hashTags = TableName.valueOf("Hashtags")
+    if (!admin.tableExists(hashTags)) {
+      val descriptor = new HTableDescriptor(hashTags)
+      descriptor.addFamily(new HColumnDescriptor("metrics"))
+      descriptor.addFamily(new HColumnDescriptor("temporal"))
+      admin.createTable(descriptor)
     }
+
+    // Create HTable Locations if it does not exist.
+    val locations = TableName.valueOf("Locations")
+    if (!admin.tableExists(locations)){
+      val descriptor = new HTableDescriptor(locations)
+      descriptor.addFamily(new HColumnDescriptor("metrics"))
+      admin.createTable(descriptor)
+    }
+
+    // Create HTable SortedLocations if it does not exist.
+    val sortedLocations = TableName.valueOf("SortedLocations")
+    if (!admin.tableExists(sortedLocations)){
+      val descriptor = new HTableDescriptor(sortedLocations)
+      descriptor.addFamily(new HColumnDescriptor("location"))
+      admin.createTable(descriptor)
+    }
+
+    val sortedHashTags = TableName.valueOf("SortedHashtags")
+    if (!admin.tableExists(sortedHashTags)){
+      val descriptor = new HTableDescriptor(sortedHashTags)
+      descriptor.addFamily(new HColumnDescriptor("hashtags"))
+      admin.createTable(descriptor)
+    }
+  }
 }

@@ -23,7 +23,7 @@ object SampleAnalysis extends App {
   // unary metrics per HashTag
   byText.metric { set =>
     (Occurrences(set), Focus(set), Entropy(set), Spread(set), Lifespan(set))
-  }.first(50).output(new HashtagsOutputFormat)
+  }.first(50).output(new HashTagsOutputFormat)
   // binary metrics per zone pair
   byZone.symmetric(byText) { (set1, set2) =>
     ( HashTagSimilarity (set1, set2),
@@ -33,7 +33,7 @@ object SampleAnalysis extends App {
   // temporal metrics per HashTag per day
   byText.temporal(1000 * 60 * 60 * 24) { set =>
     (Occurrences(set), Focus(set), Entropy(set), Spread(set))
-  }.first(50).output(new HashtagsOutputFormat)
+  }.first(50).output(new HashTagsOutputFormat)
   // Occurrences
   byZone.metric { set =>
     (Occurrences(set), Midpoint(set))

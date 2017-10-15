@@ -56,7 +56,7 @@ object SpatioTemporalDynamicsPerCity extends scala.App {
     case _     => new JsonInputFormat // default
   }
 
-  implicit val config = Map.empty[String, String]
+  implicit val config: Map[String, String] = Map.empty
   val env    = ExecutionEnvironment.getExecutionEnvironment
   val tweets = env.readFile(format, input)
   val tags   = tweets
@@ -81,17 +81,17 @@ object SpatioTemporalDynamicsPerCity extends scala.App {
       val metric    = toBytes("metrics")
       val hashTag   = toBytes("hashtags")
 
-      hashTags.add(metric, "occurrences", occurs )
-      hashTags.add(metric, "focus-zone",  zone   )
-      hashTags.add(metric, "focus-lat",   lat    )
-      hashTags.add(metric, "focus-lon",   lon    )
-      hashTags.add(metric, "focus",       focus  )
-      hashTags.add(metric, "entropy",     entropy)
-      hashTags.add(metric, "spread",      spread )
-      hashTags.add(metric, "first-occur", first  )
-      hashTags.add(metric, "last-occur",  last   )
+      hashTags.addColumn(metric, "occurrences", occurs )
+      hashTags.addColumn(metric, "focus-zone",  zone   )
+      hashTags.addColumn(metric, "focus-lat",   lat    )
+      hashTags.addColumn(metric, "focus-lon",   lon    )
+      hashTags.addColumn(metric, "focus",       focus  )
+      hashTags.addColumn(metric, "entropy",     entropy)
+      hashTags.addColumn(metric, "spread",      spread )
+      hashTags.addColumn(metric, "first-occur", first  )
+      hashTags.addColumn(metric, "last-occur",  last   )
 
-      locations.add(hashTag, tag, occurs)
+      locations.addColumn(hashTag, tag, occurs)
 
       tables("HashtagsPerCity").put(hashTags)
       tables("Cities"         ).put(locations)
@@ -107,13 +107,13 @@ object SpatioTemporalDynamicsPerCity extends scala.App {
       val locB   = new Put(zoneB)
       val metric = toBytes("metrics")
 
-      locA.add(metric, s"$zoneB:similarity",     similarity )
-      locA.add(metric, s"$zoneB:adoption_lag",   adoptionLag)
-      locA.add(metric, s"$zoneB:spatial_impact", spatial    )
+      locA.addColumn(metric, s"$zoneB:similarity",     similarity )
+      locA.addColumn(metric, s"$zoneB:adoption_lag",   adoptionLag)
+      locA.addColumn(metric, s"$zoneB:spatial_impact", spatial    )
 
-      locB.add(metric, s"$zoneA:similarity",     similarity )
-      locB.add(metric, s"$zoneA:adoption_lag",   adoptionLag)
-      locB.add(metric, s"$zoneA:spatial_impact", -spatial   )
+      locB.addColumn(metric, s"$zoneA:similarity",     similarity )
+      locB.addColumn(metric, s"$zoneA:adoption_lag",   adoptionLag)
+      locB.addColumn(metric, s"$zoneA:spatial_impact", -spatial   )
 
       tables("Cities").put(locA)
       tables("Cities").put(locB)
@@ -125,10 +125,10 @@ object SpatioTemporalDynamicsPerCity extends scala.App {
     case (tables, (tag, (day, (occurs, (_, _, _, focus), entropy, spread)))) =>
       val hashTags = new Put(tag)
       val temporal = toBytes("temporal")
-      hashTags.add(temporal, s"$day:occurrences", occurs )
-      hashTags.add(temporal, s"$day:focus",       focus  )
-      hashTags.add(temporal, s"$day:entropy",     entropy)
-      hashTags.add(temporal, s"$day:spread",      spread )
+      hashTags.addColumn(temporal, s"$day:occurrences", occurs )
+      hashTags.addColumn(temporal, s"$day:focus",       focus  )
+      hashTags.addColumn(temporal, s"$day:entropy",     entropy)
+      hashTags.addColumn(temporal, s"$day:spread",      spread )
       tables("HashtagsPerCity").put(hashTags)
   })
 
@@ -138,8 +138,8 @@ object SpatioTemporalDynamicsPerCity extends scala.App {
     case (tables, (zone, (occurs, (lat, lon)))) =>
       val sorted   = new Put(occurs)
       val location = toBytes("location")
-      sorted.add(location, s"$zone:latitude",  lat)
-      sorted.add(location, s"$zone:longitude", lon)
+      sorted.addColumn(location, s"$zone:latitude",  lat)
+      sorted.addColumn(location, s"$zone:longitude", lon)
       tables("SortedCities").put(sorted)
   })
 
@@ -154,13 +154,13 @@ object SpatioTemporalDynamicsPerCity extends scala.App {
       val hashTag  = toBytes("hashtags")
       val location = toBytes("locations")
 
-      sorted.add(hashTag, tag, "")
+      sorted.addColumn(hashTag, tag, "")
 
       for { (zone, occ) <- distribution } {
         val (lat, lon) = midpoints(zone)
-        hashTags.add(location, s"$zone:occurrences", occ)
-        hashTags.add(location, s"$zone:latitude",    lat)
-        hashTags.add(location, s"$zone:longitude",   lon)
+        hashTags.addColumn(location, s"$zone:occurrences", occ)
+        hashTags.addColumn(location, s"$zone:latitude",    lat)
+        hashTags.addColumn(location, s"$zone:longitude",   lon)
       }
 
       tables("SortedHashtagsPerCity"     ).put(sorted)

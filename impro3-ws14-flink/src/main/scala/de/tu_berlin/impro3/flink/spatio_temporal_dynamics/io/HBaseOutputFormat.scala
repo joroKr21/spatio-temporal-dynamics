@@ -11,43 +11,36 @@ import language.{ implicitConversions, reflectiveCalls }
 import java.math.BigDecimal
 import java.nio.ByteBuffer
 
-abstract class HBaseOutputFormat[T](tableNames: String*)
-                                   (implicit config: Map[String, String])
-  extends OutputFormat[T] {
+abstract class HBaseOutputFormat[T](tableNames: String*)(
+  implicit config: Map[String, String]
+) extends OutputFormat[T] {
 
-  var tables = Map.empty[String, HTable]
+  var conn: Connection = _
+  var tables = Map.empty[String, Table]
 
-  def configure(parameters: Configuration) = ()
+  def configure(parameters: Configuration): Unit = ()
 
-  def open(taskNumber: Int, numTasks: Int) = {
-    val hConf = HBaseConfiguration.create
-    for { (key, value) <- config if key.startsWith("hbase") }
-      hConf.set(key, value)
-    for { name <- tableNames } tables += name -> new HTable(hConf, name)
+  def open(taskNumber: Int, numTasks: Int): Unit = {
+    val conf = HBaseConfiguration.create
+    for ((k, v) <- config) if (k.startsWith("hbase")) conf.set(k, v)
+    conn = ConnectionFactory.createConnection(conf)
+    for (name <- tableNames) tables += name -> conn.getTable(TableName.valueOf(name))
   }
 
-  def close() = try withResources(tables.values.toSeq: _*) {
-    _.foreach { _.flushCommits() }
-  } finally tables = Map.empty
-
-  def withResource [R <: { def close(): Unit }](resource:  R )
-                                               (f: R      => Unit) =
-    try f(resource) finally resource.close()
-
-  def withResources[R <: { def close(): Unit }](resources: R*)
-                                               (f: Seq[R] => Unit) =
-    resources.foldRight(f) { (r, f) =>
-      _ => withResource(r) { _ => f(resources) }
-    } (resources)
+  def close(): Unit = {
+    tables.values.foreach(_.close())
+    tables = Map.empty
+    if (conn != null) conn.close()
+    conn = null
+  }
 }
 
 object HBaseOutputFormat {
-  def apply[T](tableNames: String*)
-              (write: (Map[String, HTable], T) => Unit)
-              (implicit config: Map[String, String]) =
-    new HBaseOutputFormat[T](tableNames: _*) {
-      def writeRecord(record: T) = write(tables, record)
-    }
+  def apply[T](tableNames: String*)(write: (Map[String, Table], T) => Unit)(
+    implicit config: Map[String, String]
+  ): HBaseOutputFormat[T] = new HBaseOutputFormat[T](tableNames: _*) {
+    def writeRecord(record: T): Unit = write(tables, record)
+  }
 
   implicit def toBytes(x: Boolean   ): Array[Byte] = Bytes.toBytes(x)
   implicit def toBytes(x: Byte      ): Array[Byte] = Bytes.toBytes(x)
